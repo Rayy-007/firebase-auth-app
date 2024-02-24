@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Form = ({ isSignInUser }) => {
+const Form = ({ isSignInUser, signUpwithEmail, signInWithEmail }) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,10 +12,19 @@ const Form = ({ isSignInUser }) => {
       [event.target.name]: event.target.value,
     });
   };
-  console.log(isSignInUser);
+
+  const hadleSignup = (event) => {
+    event.preventDefault();
+    signUpwithEmail(formData);
+  };
+
+  const hadleSignIn = (event) => {
+    event.preventDefault();
+    signInWithEmail(formData);
+  };
 
   return (
-    <form id="stripe-login">
+    <form onSubmit={isSignInUser ? hadleSignIn : hadleSignup} id="stripe-login">
       <div className="field padding-bottom--24">
         <label htmlFor="email">Email</label>
         <input
@@ -50,7 +59,10 @@ const Form = ({ isSignInUser }) => {
       </div>
 
       <div className="field padding-bottom--24">
-        <input type="submit" name="Create Account" value="Continue" />
+        <input
+          type="submit"
+          value={isSignInUser ? "Login" : "Create Account"}
+        />
       </div>
       <div className="field">
         <a className="ssolink" href="#">
