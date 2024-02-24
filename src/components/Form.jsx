@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../App";
 
-const Form = ({ isSignInUser, signUpwithEmail, signInWithEmail }) => {
+const Form = ({ isSignInUser }) => {
+  const { signInWithEmail, signUpwithEmail } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",

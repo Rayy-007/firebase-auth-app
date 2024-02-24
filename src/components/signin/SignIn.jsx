@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Form from "../Form";
 import AnimationBg from "../AnimationBg";
 
-const SignIn = ({signInWithEmail}) => {
+const SignIn = () => {
   return (
     <div className="login-root">
       <div
@@ -23,7 +23,7 @@ const SignIn = ({signInWithEmail}) => {
                 <span className="padding-bottom--15">
                   Sign In to your account
                 </span>
-                <Form isSignInUser={true} signInWithEmail={signInWithEmail} />
+                <Form isSignInUser={true} />
               </div>
             </div>
             <div className="footer-link padding-top--24">

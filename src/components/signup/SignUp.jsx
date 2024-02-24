@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Form from "../Form";
 import AnimationBg from "../AnimationBg";
 
-const SingUp = ({ signUpwithEmail }) => {
+const SingUp = () => {
   return (
     <div className="login-root">
       <div
@@ -24,7 +24,7 @@ const SingUp = ({ signUpwithEmail }) => {
                   Sign Up to your account
                 </span>
                 {/* -------------- From ---------------- */}
-                <Form signUpwithEmail={signUpwithEmail} isSignInUser={false} />
+                <Form isSignInUser={false} />
               </div>
             </div>
             <div className="footer-link padding-top--24">

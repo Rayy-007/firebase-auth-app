@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import SignUp from "./components/signup/SignUp";
 import SignIn from "./components/signin/SignIn";
 import { auth } from "./firebase/config";
@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+export const AuthContext = createContext();
 
 const App = () => {
   const signUpwithEmail = (signUpData) => {
@@ -31,18 +33,14 @@ const App = () => {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<SignUp signUpwithEmail={signUpwithEmail} />}
-        />
-        <Route
-          path="/login"
-          element={<SignIn signInWithEmail={signInWithEmail} />}
-        />
-      </Routes>
-    </BrowserRouter>
+    <AuthContext.Provider value={{ signInWithEmail, signUpwithEmail }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<SignUp />} />
+          <Route path="/login" element={<SignIn />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 };
 
