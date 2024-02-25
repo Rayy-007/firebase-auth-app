@@ -22,6 +22,36 @@ a {
   color: #5469d4;
   text-decoration: unset;
 }
+
+button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #5469d4;
+  color: white;
+  font-size: 1.3rem;
+}
+
+button:hover {
+  background-color: #4255c0;
+}
+
+button:active {
+  background-color: #3747b2;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
 .login-root {
   background: #fff;
   display: flex;
@@ -197,16 +227,16 @@ a.ssolink {
 }
 
 .animationRightLeft {
-  animation: animationRightLeft 2s ease-in-out infinite;
+  animation: animationRightLeft 7s ease-in-out infinite;
 }
 .animationLeftRight {
-  animation: animationLeftRight 2s ease-in-out infinite;
+  animation: animationLeftRight 7s ease-in-out infinite;
 }
 .tans3s {
-  animation: animationLeftRight 3s ease-in-out infinite;
+  animation: animationLeftRight 9s ease-in-out infinite;
 }
 .tans4s {
-  animation: animationLeftRight 4s ease-in-out infinite;
+  animation: animationLeftRight 11s ease-in-out infinite;
 }
 
 @keyframes animationLeftRight {
