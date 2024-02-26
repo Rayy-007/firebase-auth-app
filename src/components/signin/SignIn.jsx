@@ -32,7 +32,7 @@ const SignIn = () => {
               </span>
               <div className="listing padding-top--24 padding-bottom--24 flex-flex center-center">
                 <span>
-                  <a href="#">© Stackfindover</a>
+                  <a href="#">© MinKhant</a>
                 </span>
               </div>
             </div>

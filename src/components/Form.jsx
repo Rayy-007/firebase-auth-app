@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../App";
+import { Link } from "react-router-dom";
 
 const Form = ({ isSignInUser }) => {
   const { signInWithEmail, signUpwithEmail } = useContext(AuthContext);
@@ -68,9 +69,9 @@ const Form = ({ isSignInUser }) => {
         />
       </div>
       <div className="field">
-        <a className="ssolink" href="#">
+        <Link className="ssolink" to="/signupGoogle">
           Use single sign-on (Google) instead
-        </a>
+        </Link>
       </div>
     </form>
   );
