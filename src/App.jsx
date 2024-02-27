@@ -71,25 +71,34 @@ const App = () => {
 
   // Checking if the user is signed in or not
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user.auth.currentUser);
+        console.log(user);
         setSignedInUser(user.auth.currentUser);
         navigate("/success");
       } else {
         navigate("/");
       }
     });
+    return () => unsubscribe();
   }, []);
 
   // Update user profile
   const updateUserProfile = (updatedData) => {
+    const updateName = updatedData.newName
+      ? updatedData.newName
+      : auth?.currentUser.displayName;
+    const updatePhoto = updatedData.newPhoto
+      ? updatedData.newPhoto
+      : auth?.currentUser.photoURL;
+
     updateProfile(auth.currentUser, {
-      displayName: updatedData.newName,
-      photoURL: updatedData.newPhoto,
+      displayName: updateName,
+      photoURL: updatePhoto,
     })
       .then(() => {
-        console.log("Successfully updated user profile");
+        alert("Successfully updated user profile");
+        navigate("/success");
       })
       .catch((err) => {
         console.error(err.message);

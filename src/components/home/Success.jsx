@@ -33,6 +33,7 @@ const Home = ({ signOutHandle }) => {
         src={
           signedInUser?.photoURL ? signedInUser.photoURL : PlaceholderProfile
         }
+        referrerPolicy="no-referrer"
         alt="Profile Image"
         width={100}
         height={100}
