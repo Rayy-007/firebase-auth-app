@@ -42,6 +42,12 @@ button:active {
   background-color: #3747b2;
 }
 
+.profile-image {
+  object-fit: cover;
+  border-radius: 50%;
+  border: 5px solid #353d64;
+}
+
 .social-btn {
   display: flex;
   align-items: center;
@@ -205,7 +211,8 @@ label {
   align-items: center;
 }
 
-.field input {
+.field input,
+textarea {
   font-size: 16px;
   line-height: 28px;
   padding: 8px 16px;

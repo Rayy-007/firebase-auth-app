@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import SignUp from "./components/signup/SignUp";
 import SignIn from "./components/signin/SignIn";
-import { auth } from "./firebase/config";
+import { auth, db } from "./firebase/config";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -11,6 +11,7 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Success from "./components/home/Success";
 import Home from "./components/home/Home";
@@ -24,6 +25,7 @@ const App = () => {
   const provider = new GoogleAuthProvider();
 
   const [signedInUser, setSignedInUser] = useState();
+
   // Sign Up with Email
   const signUpwithEmail = (signUpData) => {
     console.log(signUpData);
@@ -105,6 +107,18 @@ const App = () => {
       });
   };
 
+  // Add data to Firebase
+  const addDataToFirebase = async (dataMessage) => {
+    try {
+      const docRef = await addDoc(collection(db, "users"), {
+        message: dataMessage,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -113,6 +127,7 @@ const App = () => {
         signInWithGoogle,
         signedInUser,
         updateUserProfile,
+        addDataToFirebase,
       }}
     >
       <Routes>

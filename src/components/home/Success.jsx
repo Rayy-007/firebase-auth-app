@@ -3,7 +3,8 @@ import { AuthContext } from "../../App";
 import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 
 const Home = ({ signOutHandle }) => {
-  const { signedInUser, updateUserProfile } = useContext(AuthContext);
+  const { signedInUser, updateUserProfile, addDataToFirebase } =
+    useContext(AuthContext);
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
@@ -12,14 +13,32 @@ const Home = ({ signOutHandle }) => {
     newPhoto: "",
   });
 
+  const [message, setMessage] = useState();
+
+  // Getting udated data from input fields
   const handleUpdateChange = (event) => {
     setUpdateData({ ...updateData, [event.target.name]: event.target.value });
   };
 
+  // updated data from form
   const handleFormUpdateSubmit = (event) => {
     event.preventDefault();
     updateUserProfile(updateData);
+    setUpdateData({
+      newName: "",
+      newPhoto: "",
+    });
     setShowUpdateForm(false);
+  };
+
+  // Getting Message from input fields
+  const handleMessageChange = (event) => {
+    setMessage(event.target.value);
+  };
+
+  const handleFormMessageSubmit = (event) => {
+    event.preventDefault();
+    addDataToFirebase(message);
   };
 
   return (
@@ -37,31 +56,58 @@ const Home = ({ signOutHandle }) => {
         alt="Profile Image"
         width={100}
         height={100}
+        className="profile-image"
       />
 
+      {!showUpdateForm && (
+        <button onClick={() => setShowUpdateForm(true)} className="edit-btn">
+          Edit Profile
+        </button>
+      )}
+
+      {showUpdateForm && (
+        <div>
+          <form onSubmit={handleFormUpdateSubmit}>
+            <div className="field padding-bottom--24">
+              <label htmlFor="email">Your New Name</label>
+
+              <input
+                type="text"
+                placeholder="Your New Name"
+                value={updateData.newName}
+                onChange={handleUpdateChange}
+                name="newName"
+              />
+            </div>
+            <div className="field padding-bottom--24">
+              <label htmlFor="email">Your New Photo</label>
+              <input
+                type="text"
+                placeholder="Your New Photo"
+                value={updateData.newPhoto}
+                onChange={handleUpdateChange}
+                name="newPhoto"
+              />
+            </div>
+
+            <button>Update</button>
+          </form>
+        </div>
+      )}
+
       <div>
-        <form onSubmit={handleFormUpdateSubmit}>
+        <form onSubmit={handleFormMessageSubmit}>
           <div className="field padding-bottom--24">
-            <label htmlFor="email">Your New Name</label>
-
-            <input
-              type="text"
-              placeholder="Your New Name"
-              onChange={handleUpdateChange}
-              name="newName"
+            <label htmlFor="email">Message</label>
+            <textarea
+              type="message"
+              name="message"
+              value={message}
+              onChange={handleMessageChange}
+              placeholder="What are you feelling now?"
             />
           </div>
-          <div className="field padding-bottom--24">
-            <label htmlFor="email">Your New Photo</label>
-            <input
-              type="text"
-              placeholder="Your New Photo"
-              onChange={handleUpdateChange}
-              name="newPhoto"
-            />
-          </div>
-
-          <button>Update</button>
+          <button>Send</button>
         </form>
       </div>
 
