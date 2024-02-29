@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../App";
 import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
+import Post from "../post/Post";
 
 const Home = ({ signOutHandle }) => {
   const { signedInUser, updateUserProfile, addDataToFirebase } =
@@ -35,8 +36,9 @@ const Home = ({ signOutHandle }) => {
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
-
+  //  Sending Message To Firebase
   const handleFormMessageSubmit = (event) => {
+    setMessage("");
     event.preventDefault();
     addDataToFirebase(message);
   };
@@ -110,6 +112,8 @@ const Home = ({ signOutHandle }) => {
           <button>Send</button>
         </form>
       </div>
+
+      <Post />
 
       <img
         src="https://i.pinimg.com/originals/5b/54/39/5b543923641d0ef1df257706e19ee255.gif"

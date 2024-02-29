@@ -11,7 +11,12 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getDocs,
+} from "firebase/firestore";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Success from "./components/home/Success";
 import Home from "./components/home/Home";
@@ -25,13 +30,13 @@ const App = () => {
   const provider = new GoogleAuthProvider();
 
   const [signedInUser, setSignedInUser] = useState();
+  const [postsData, setPostsData] = useState();
 
   // Sign Up with Email
   const signUpwithEmail = (signUpData) => {
-    console.log(signUpData);
     createUserWithEmailAndPassword(auth, signUpData.email, signUpData.password)
       .then((userInfo) => {
-        console.log(userInfo.user);
+        alert("Created account successfully");
       })
       .catch((error) => {
         console.error(error.message);
@@ -42,7 +47,7 @@ const App = () => {
   const signInWithEmail = (signInData) => {
     signInWithEmailAndPassword(auth, signInData.email, signInData.password)
       .then((userInfo) => {
-        console.log(userInfo.user, "Successfully signed in");
+        alert("Successfully signed in");
       })
       .catch((error) => {
         console.error(error.message);
@@ -53,7 +58,7 @@ const App = () => {
   const signInWithGoogle = () => {
     signInWithPopup(auth, provider)
       .then(() => {
-        console.log("Signed In with Google");
+        alert("Signed In with Google");
       })
       .catch((error) => {
         console.error(error.message);
@@ -73,9 +78,9 @@ const App = () => {
 
   // Checking if the user is signed in or not
   useEffect(() => {
+    getDataFromFirebase();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        console.log(user);
         setSignedInUser(user.auth.currentUser);
         navigate("/success");
       } else {
@@ -109,15 +114,27 @@ const App = () => {
 
   // Add data to Firebase
   const addDataToFirebase = async (dataMessage) => {
+    const userId = auth.currentUser.uid;
     try {
-      const docRef = await addDoc(collection(db, "users"), {
+      const docRef = await addDoc(collection(db, "posts"), {
         message: dataMessage,
+        userId: userId,
+        createdAt: serverTimestamp(),
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (error) {
       console.error("Error adding document: ", error);
     }
   };
+
+  // Fetch data from Firebase
+  const getDataFromFirebase = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    querySnapshot.forEach((doc) => {
+      setPostsData(doc?.data());
+    });
+  };
+
+  console.log(postsData);
 
   return (
     <AuthContext.Provider
@@ -128,6 +145,7 @@ const App = () => {
         signedInUser,
         updateUserProfile,
         addDataToFirebase,
+        postsData,
       }}
     >
       <Routes>
