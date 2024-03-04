@@ -4,8 +4,12 @@ import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 
 const Home = ({ signOutHandle }) => {
-  const { signedInUser, updateUserProfile, addDataToFirebase } =
-    useContext(AuthContext);
+  const {
+    signedInUser,
+    updateUserProfile,
+    addDataToFirebase,
+    refreshPostsData,
+  } = useContext(AuthContext);
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
@@ -38,9 +42,13 @@ const Home = ({ signOutHandle }) => {
   };
   //  Sending Message To Firebase
   const handleFormMessageSubmit = (event) => {
-    setMessage("");
     event.preventDefault();
-    addDataToFirebase(message);
+    if (message) {
+      addDataToFirebase(message);
+    } else {
+      alert("Please enter a message");
+    }
+    setMessage("");
   };
 
   return (
@@ -49,7 +57,6 @@ const Home = ({ signOutHandle }) => {
         Hey {signedInUser?.displayName ? signedInUser.displayName : "friend"},
         how are you?
       </h1>
-
       <img
         src={
           signedInUser?.photoURL ? signedInUser.photoURL : PlaceholderProfile
@@ -60,13 +67,11 @@ const Home = ({ signOutHandle }) => {
         height={100}
         className="profile-image"
       />
-
       {!showUpdateForm && (
         <button onClick={() => setShowUpdateForm(true)} className="edit-btn">
           Edit Profile
         </button>
       )}
-
       {showUpdateForm && (
         <div>
           <form onSubmit={handleFormUpdateSubmit}>
@@ -96,7 +101,6 @@ const Home = ({ signOutHandle }) => {
           </form>
         </div>
       )}
-
       <div>
         <form onSubmit={handleFormMessageSubmit}>
           <div className="field padding-bottom--24">
@@ -112,14 +116,12 @@ const Home = ({ signOutHandle }) => {
           <button>Send</button>
         </form>
       </div>
-
+      <button onClick={() => refreshPostsData()}>Refresh Posts</button>
       <Post />
-
       <img
         src="https://i.pinimg.com/originals/5b/54/39/5b543923641d0ef1df257706e19ee255.gif"
         alt="Ship is floating"
       />
-
       <button onClick={() => signOutHandle()}>Sign Out</button>
     </div>
   );

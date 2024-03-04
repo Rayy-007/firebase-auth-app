@@ -18,7 +18,6 @@ export const dateFormat = (firebaseDate) => {
     "November",
     "December",
   ];
-  console.log("this from format ", date?.getMonth());
   const month = monthNames[date?.getMonth()];
 
   let hours = date?.getHours();

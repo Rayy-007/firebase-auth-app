@@ -30,7 +30,7 @@ const App = () => {
   const provider = new GoogleAuthProvider();
 
   const [signedInUser, setSignedInUser] = useState();
-  const [postsData, setPostsData] = useState();
+  const [postsData, setPostsData] = useState([]);
 
   // Sign Up with Email
   const signUpwithEmail = (signUpData) => {
@@ -78,7 +78,6 @@ const App = () => {
 
   // Checking if the user is signed in or not
   useEffect(() => {
-    getDataFromFirebase();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setSignedInUser(user.auth.currentUser);
@@ -127,14 +126,19 @@ const App = () => {
   };
 
   // Fetch data from Firebase
-  const getDataFromFirebase = async () => {
-    const querySnapshot = await getDocs(collection(db, "posts"));
-    querySnapshot.forEach((doc) => {
-      setPostsData(doc?.data());
-    });
-  };
+  useEffect(() => {
+    const fetchPostsData = async () => {
+      const querySnapshot = await getDocs(collection(db, "posts"));
+      setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+    };
+    fetchPostsData();
+  }, []);
 
-  console.log(postsData);
+  // Manually Refresh the Fetch Data
+  const refreshPostsData = async () => {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+  };
 
   return (
     <AuthContext.Provider
@@ -146,6 +150,7 @@ const App = () => {
         updateUserProfile,
         addDataToFirebase,
         postsData,
+        refreshPostsData,
       }}
     >
       <Routes>

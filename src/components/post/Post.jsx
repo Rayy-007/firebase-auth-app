@@ -6,8 +6,16 @@ const Post = () => {
   const { postsData } = useContext(AuthContext);
   return (
     <div>
-      <div>{postsData?.message}</div>
-      <div>{dateFormat(postsData?.createdAt)}</div>
+      {!postsData ? (
+        <div>Loading Posts....</div>
+      ) : (
+        postsData?.map((post) => (
+          <div>
+            <h2>{post?.message}</h2>
+            <p>{dateFormat(post?.createdAt)}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 };
