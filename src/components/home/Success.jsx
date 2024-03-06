@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../App";
 import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
+import { Button } from "@material-tailwind/react";
 
 const Home = ({ signOutHandle }) => {
   const {
@@ -52,7 +53,7 @@ const Home = ({ signOutHandle }) => {
   };
 
   return (
-    <div className="container">
+    <div className="container2 ">
       <h1>
         Hey {signedInUser?.displayName ? signedInUser.displayName : "friend"},
         how are you?
@@ -68,9 +69,9 @@ const Home = ({ signOutHandle }) => {
         className="profile-image"
       />
       {!showUpdateForm && (
-        <button onClick={() => setShowUpdateForm(true)} className="edit-btn">
+        <Button onClick={() => setShowUpdateForm(true)} className="edit-btn">
           Edit Profile
-        </button>
+        </Button>
       )}
       {showUpdateForm && (
         <div>
