@@ -16,15 +16,21 @@ import {
   addDoc,
   serverTimestamp,
   getDocs,
+  onSnapshot,
+  query,
+  where,
 } from "firebase/firestore";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Success from "./components/home/Success";
 import Home from "./components/home/Home";
 import GoogleLogin from "./components/google/GoogleLogin";
+import { FetchOnceData, FetchRealTimeData } from "./firebase/FetchData";
 
 export const AuthContext = createContext();
 
 const App = () => {
+  const COLLECTION_NAME = "posts";
+
   const navigate = useNavigate();
 
   const provider = new GoogleAuthProvider();
@@ -115,7 +121,7 @@ const App = () => {
   const addDataToFirebase = async (dataMessage) => {
     const userId = auth.currentUser.uid;
     try {
-      const docRef = await addDoc(collection(db, "posts"), {
+      const docRef = await addDoc(collection(db, COLLECTION_NAME), {
         message: dataMessage,
         userId: userId,
         createdAt: serverTimestamp(),
@@ -125,19 +131,29 @@ const App = () => {
     }
   };
 
-  // Fetch data from Firebase
+  // Real time fetching data from Firebase
   useEffect(() => {
-    const fetchPostsData = async () => {
-      const querySnapshot = await getDocs(collection(db, "posts"));
-      setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+    const fetchRealTimeData = async () => {
+      try {
+        const data = await FetchRealTimeData();
+        setPostsData(data);
+      } catch (error) {
+        console.error("Error fetching real-time data:", error);
+      }
     };
-    fetchPostsData();
+    fetchRealTimeData();
   }, []);
 
   // Manually Refresh the Fetch Data
   const refreshPostsData = async () => {
-    const querySnapshot = await getDocs(collection(db, "posts"));
-    setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+    // const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
+    // setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+    try {
+      const data = await FetchOnceData();
+      console.log("🚀 ~ refreshPostsData ~ data:", data);
+    } catch (error) {
+      console.error("Error fetching Once  data:", error);
+    }
   };
 
   return (
@@ -168,9 +184,3 @@ const App = () => {
 };
 
 export default App;
-
-{
-  /* <div className="formbg">
-<Form />
-</div> */
-}

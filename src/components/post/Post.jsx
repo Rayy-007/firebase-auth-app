@@ -9,8 +9,8 @@ const Post = () => {
       {!postsData ? (
         <div>Loading Posts....</div>
       ) : (
-        postsData?.map((post) => (
-          <div>
+        postsData?.map((post, index) => (
+          <div key={index}>
             <h2>{post?.message}</h2>
             <p>{dateFormat(post?.createdAt)}</p>
           </div>
