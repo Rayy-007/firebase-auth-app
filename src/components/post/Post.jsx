@@ -3,11 +3,13 @@ import { AuthContext } from "../../App";
 import { dateFormat } from "../../firebase/displayDate";
 
 const Post = () => {
-  const { postsData } = useContext(AuthContext);
+  const { postsData, isLoading } = useContext(AuthContext);
   return (
     <div>
       {!postsData ? (
         <div>Loading Posts....</div>
+      ) : isLoading ? (
+        <div>Loading................</div>
       ) : (
         postsData?.map((post, index) => (
           <div key={index}>

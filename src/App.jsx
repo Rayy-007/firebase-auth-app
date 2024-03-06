@@ -15,10 +15,7 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  getDocs,
   onSnapshot,
-  query,
-  where,
 } from "firebase/firestore";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Success from "./components/home/Success";
@@ -37,6 +34,7 @@ const App = () => {
 
   const [signedInUser, setSignedInUser] = useState();
   const [postsData, setPostsData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Sign Up with Email
   const signUpwithEmail = (signUpData) => {
@@ -119,11 +117,10 @@ const App = () => {
 
   // Add data to Firebase
   const addDataToFirebase = async (dataMessage) => {
-    const userId = auth.currentUser.uid;
     try {
       const docRef = await addDoc(collection(db, COLLECTION_NAME), {
         message: dataMessage,
-        userId: userId,
+        userId: signedInUser.uid,
         createdAt: serverTimestamp(),
       });
     } catch (error) {
@@ -134,22 +131,28 @@ const App = () => {
   // Real time fetching data from Firebase
   useEffect(() => {
     const fetchRealTimeData = async () => {
-      try {
-        const data = await FetchRealTimeData();
-        setPostsData(data);
-      } catch (error) {
-        console.error("Error fetching real-time data:", error);
-      }
+      FetchRealTimeData(signedInUser?.uid, setPostsData);
+      // console.log("Fetching data from Firebase");
+      // setIsLoading(true);
+      // try {
+      //   const data = await FetchRealTimeData(signedInUser?.uid);
+      //   setPostsData(data);
+      // } catch (error) {
+      //   console.error("Error fetching real-time data:", error);
+      // } finally {
+      //   setIsLoading(false);
+      // }
     };
     fetchRealTimeData();
-  }, []);
+  }, [signedInUser, onSnapshot]);
 
   // Manually Refresh the Fetch Data
   const refreshPostsData = async () => {
     // const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
     // setPostsData(querySnapshot.docs.map((doc) => doc.data()));
     try {
-      const data = await FetchOnceData();
+      const data = await FetchOnceData(signedInUser?.uid);
+      setPostsData(data);
       console.log("🚀 ~ refreshPostsData ~ data:", data);
     } catch (error) {
       console.error("Error fetching Once  data:", error);
@@ -167,6 +170,7 @@ const App = () => {
         addDataToFirebase,
         postsData,
         refreshPostsData,
+        isLoading,
       }}
     >
       <Routes>
