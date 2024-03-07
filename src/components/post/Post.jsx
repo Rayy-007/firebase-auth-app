@@ -3,13 +3,17 @@ import { AuthContext } from "../../App";
 import { dateFormat } from "../../firebase/displayDate";
 
 const Post = () => {
-  const { postsData, isLoading } = useContext(AuthContext);
+  const { postsData, isLoading, errorMessage } = useContext(AuthContext);
+  console.log("🚀 ~ Post ~ post:", postsData);
   return (
     <div>
-      {!postsData ? (
-        <div>Loading Posts....</div>
-      ) : isLoading ? (
-        <div>Loading................</div>
+      <h2>Post Lists</h2>
+      {isLoading ? (
+        <div>Loading....</div>
+      ) : errorMessage ? (
+        <p>{errorMessage}</p>
+      ) : postsData.length === 0 ? (
+        <p>There is no Posts yet!</p>
       ) : (
         postsData?.map((post, index) => (
           <div key={index}>

@@ -30,6 +30,7 @@ export async function FetchOnceData(signedInUser) {
     throw error;
   }
 }
+
 //? Just reference for Learning (This is .then apparoach )
 // return new Promise((resolve, reject) => {
 //   getDocs(q)

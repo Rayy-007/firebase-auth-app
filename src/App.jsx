@@ -34,7 +34,8 @@ const App = () => {
 
   const [signedInUser, setSignedInUser] = useState();
   const [postsData, setPostsData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // Sign Up with Email
   const signUpwithEmail = (signUpData) => {
@@ -130,32 +131,36 @@ const App = () => {
 
   // Real time fetching data from Firebase
   useEffect(() => {
+    setIsLoading(true);
     const fetchRealTimeData = async () => {
-      FetchRealTimeData(signedInUser?.uid, setPostsData);
-      // console.log("Fetching data from Firebase");
-      // setIsLoading(true);
-      // try {
-      //   const data = await FetchRealTimeData(signedInUser?.uid);
-      //   setPostsData(data);
-      // } catch (error) {
-      //   console.error("Error fetching real-time data:", error);
-      // } finally {
-      //   setIsLoading(false);
-      // }
+      try {
+        FetchRealTimeData(signedInUser?.uid, setPostsData);
+        setIsLoading(false);
+        setErrorMessage(null);
+      } catch (error) {
+        console.error("Error fetching data Real Time Ho Ho: ", error);
+        setIsLoading(false);
+        setErrorMessage(
+          "Opps! Something went wrong! Please refresh Post Lists!"
+        );
+      }
     };
     fetchRealTimeData();
-  }, [signedInUser, onSnapshot]);
+  }, [signedInUser]);
 
   // Manually Refresh the Fetch Data
   const refreshPostsData = async () => {
-    // const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
-    // setPostsData(querySnapshot.docs.map((doc) => doc.data()));
+    setIsLoading(true);
     try {
       const data = await FetchOnceData(signedInUser?.uid);
       setPostsData(data);
+      setIsLoading(false);
+      setErrorMessage(null);
       console.log("🚀 ~ refreshPostsData ~ data:", data);
     } catch (error) {
       console.error("Error fetching Once  data:", error);
+      setIsLoading(false);
+      setErrorMessage("Opps! Something went wrong! Please refresh Post Lists!");
     }
   };
 
@@ -171,6 +176,7 @@ const App = () => {
         postsData,
         refreshPostsData,
         isLoading,
+        errorMessage,
       }}
     >
       <Routes>
