@@ -3,6 +3,7 @@ import { AuthContext } from "../../App";
 import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 import { Button } from "@material-tailwind/react";
+import UpProfileForm from "../updateProfile/UpProfileForm";
 
 const Home = ({ signOutHandle }) => {
   const {
@@ -14,28 +15,7 @@ const Home = ({ signOutHandle }) => {
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
-  const [updateData, setUpdateData] = useState({
-    newName: "",
-    newPhoto: "",
-  });
-
   const [message, setMessage] = useState();
-
-  // Getting udated data from input fields
-  const handleUpdateChange = (event) => {
-    setUpdateData({ ...updateData, [event.target.name]: event.target.value });
-  };
-
-  // updated data from form
-  const handleFormUpdateSubmit = (event) => {
-    event.preventDefault();
-    updateUserProfile(updateData);
-    setUpdateData({
-      newName: "",
-      newPhoto: "",
-    });
-    setShowUpdateForm(false);
-  };
 
   // Getting Message from input fields
   const handleMessageChange = (event) => {
@@ -73,35 +53,10 @@ const Home = ({ signOutHandle }) => {
           Edit Profile
         </Button>
       )}
-      {showUpdateForm && (
-        <div>
-          <form onSubmit={handleFormUpdateSubmit}>
-            <div className="field padding-bottom--24">
-              <label htmlFor="email">Your New Name</label>
-
-              <input
-                type="text"
-                placeholder="Your New Name"
-                value={updateData.newName}
-                onChange={handleUpdateChange}
-                name="newName"
-              />
-            </div>
-            <div className="field padding-bottom--24">
-              <label htmlFor="email">Your New Photo</label>
-              <input
-                type="text"
-                placeholder="Your New Photo"
-                value={updateData.newPhoto}
-                onChange={handleUpdateChange}
-                name="newPhoto"
-              />
-            </div>
-
-            <button>Update</button>
-          </form>
-        </div>
-      )}
+      <UpProfileForm
+        showUpdateForm={showUpdateForm}
+        setShowUpdateForm={setShowUpdateForm}
+      />
       <div>
         <form onSubmit={handleFormMessageSubmit}>
           <div className="field padding-bottom--24">
