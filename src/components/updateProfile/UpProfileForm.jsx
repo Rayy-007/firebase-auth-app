@@ -2,12 +2,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../App";
 
 const UpProfileForm = ({ showUpdateForm, setShowUpdateForm }) => {
-  const {
-    signedInUser,
-    updateUserProfile,
-    addDataToFirebase,
-    refreshPostsData,
-  } = useContext(AuthContext);
+  const { updateUserProfile } = useContext(AuthContext);
 
   const [updateData, setUpdateData] = useState({
     newName: "",

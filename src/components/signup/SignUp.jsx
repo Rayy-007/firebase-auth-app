@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Form from "../Form";
 import AnimationBg from "../AnimationBg";
 
-const SingUp = () => {
+const SignUp = () => {
   return (
     <div className="login-root">
       <div
@@ -44,4 +44,4 @@ const SingUp = () => {
   );
 };
 
-export default SingUp;
+export default SignUp;
