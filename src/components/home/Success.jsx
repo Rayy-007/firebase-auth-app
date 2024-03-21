@@ -4,14 +4,13 @@ import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 import { Button } from "@material-tailwind/react";
 import UpProfileForm from "../updateProfile/UpProfileForm";
+import { useFirebaseAuth } from "../../firebase/AuthContext";
+import { useFetchData } from "../../firebase/FetchContext";
 
-const Home = ({ signOutHandle }) => {
-  const {
-    signedInUser,
-    updateUserProfile,
-    addDataToFirebase,
-    refreshPostsData,
-  } = useContext(AuthContext);
+const Home = () => {
+  const { signedInUser, signOutHandle } = useFirebaseAuth();
+  const { addDataToFirebase } = useContext(AuthContext);
+  const { refreshPostsData } = useFetchData();
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 

@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "../../App";
 import { dateFormat } from "../../firebase/displayDate";
+import { useFetchData } from "../../firebase/FetchContext";
 
 const Post = () => {
-  const { postsData, isLoading, errorMessage } = useContext(AuthContext);
+  const { postsData, isLoading, errorMessage } = useFetchData();
   console.log("🚀 ~ Post ~ post:", postsData);
   return (
     <div>
@@ -12,7 +13,7 @@ const Post = () => {
         <div>Loading....</div>
       ) : errorMessage ? (
         <p>{errorMessage}</p>
-      ) : postsData.length === 0 ? (
+      ) : postsData?.length === 0 ? (
         <p>There is no Posts yet!</p>
       ) : (
         postsData?.map((post, index) => (
