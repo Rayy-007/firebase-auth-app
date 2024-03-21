@@ -78,6 +78,8 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  console.log("🚀 ~ AuthProvider ~ signedInUser:", signedInUser);
+
   return (
     <AuthContext.Provider
       value={{

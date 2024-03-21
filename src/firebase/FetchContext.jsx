@@ -1,13 +1,13 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { FetchOnceData, FetchRealTimeData } from "./FetchData";
-import { AuthContext } from "../App";
+import { useFirebaseAuth } from "./AuthContext";
 
 const FetchContext = createContext();
 
 export const useFetchData = () => useContext(FetchContext);
 
 export const FetchDataProvider = ({ children }) => {
-  const { signedInUser } = useContext(AuthContext);
+  const { signedInUser } = useFirebaseAuth();
 
   const [postsData, setPostsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
