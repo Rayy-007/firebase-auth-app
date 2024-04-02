@@ -1,18 +1,14 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
-import { auth, db } from "./firebase/config";
+import { auth } from "./firebase/config";
 import { Home, Success, GoogleLogin, SignIn, SignUp } from "./components";
-import { useFirebaseAuth } from "./firebase/AuthContext";
-import { FetchDataProvider } from "./firebase/FetchContext";
+import { FetchDataProvider } from "./hooks/FetchContext";
+import { FirebaseFnProvider } from "./hooks/FirebaseContext";
 
 export const AuthContext = createContext();
 
 const App = () => {
-  const COLLECTION_NAME = "posts";
-  const { signedInUser } = useFirebaseAuth();
-
   const navigate = useNavigate();
 
   // Update user profile
@@ -37,34 +33,22 @@ const App = () => {
       });
   };
 
-  // Add data to Firebase
-  const addDataToFirebase = async (dataMessage) => {
-    try {
-      const docRef = await addDoc(collection(db, COLLECTION_NAME), {
-        message: dataMessage,
-        userId: signedInUser.uid,
-        createdAt: serverTimestamp(),
-      });
-    } catch (error) {
-      console.error("Error adding document: ", error);
-    }
-  };
-
   return (
     <AuthContext.Provider
       value={{
         updateUserProfile,
-        addDataToFirebase,
       }}
     >
       <FetchDataProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/signupGoogle" element={<GoogleLogin />} />
-          <Route path="/success" element={<Success />} />
-        </Routes>
+        <FirebaseFnProvider>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/signupGoogle" element={<GoogleLogin />} />
+            <Route path="/success" element={<Success />} />
+          </Routes>
+        </FirebaseFnProvider>
       </FetchDataProvider>
     </AuthContext.Provider>
   );

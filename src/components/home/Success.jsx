@@ -4,32 +4,16 @@ import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 import { Button } from "@material-tailwind/react";
 import UpProfileForm from "../updateProfile/UpProfileForm";
-import { useFirebaseAuth } from "../../firebase/AuthContext";
-import { useFetchData } from "../../firebase/FetchContext";
+import { useFirebaseAuth } from "../../hooks/AuthContext";
+import { useFetchData } from "../../hooks/FetchContext";
+import AddPost from "../post/AddPost";
 
 const Home = () => {
   const { signedInUser, signOutHandle } = useFirebaseAuth();
-  const { addDataToFirebase } = useContext(AuthContext);
+
   const { refreshPostsData } = useFetchData();
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
-
-  const [message, setMessage] = useState();
-
-  // Getting Message from input fields
-  const handleMessageChange = (event) => {
-    setMessage(event.target.value);
-  };
-  //  Sending Message To Firebase
-  const handleFormMessageSubmit = (event) => {
-    event.preventDefault();
-    if (message) {
-      addDataToFirebase(message);
-    } else {
-      alert("Please enter a message");
-    }
-    setMessage("");
-  };
 
   return (
     <div className="container2 ">
@@ -56,21 +40,9 @@ const Home = () => {
         showUpdateForm={showUpdateForm}
         setShowUpdateForm={setShowUpdateForm}
       />
-      <div>
-        <form onSubmit={handleFormMessageSubmit}>
-          <div className="field padding-bottom--24">
-            <label htmlFor="email">Message</label>
-            <textarea
-              type="message"
-              name="message"
-              value={message}
-              onChange={handleMessageChange}
-              placeholder="What are you feelling now?"
-            />
-          </div>
-          <button>Send</button>
-        </form>
-      </div>
+
+      <AddPost />
+
       <button onClick={() => refreshPostsData()}>Refresh Posts</button>
       <Post />
       <img

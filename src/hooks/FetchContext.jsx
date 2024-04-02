@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { FetchOnceData, FetchRealTimeData } from "./FetchData";
+import { FetchOnceData, FetchRealTimeData } from "../firebase/FetchData";
 import { useFirebaseAuth } from "./AuthContext";
 
 const FetchContext = createContext();

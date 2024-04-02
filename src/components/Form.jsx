@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useFirebaseAuth } from "../firebase/AuthContext";
+import { useFirebaseAuth } from "../hooks/AuthContext";
 
 const Form = ({ isSignInUser }) => {
   const { signInWithEmail, signUpWithEmail } = useFirebaseAuth();
