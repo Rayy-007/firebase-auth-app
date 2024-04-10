@@ -16,7 +16,7 @@ const Home = () => {
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
   return (
-    <div className="container2 ">
+    <div className="container ">
       <h1>
         Hey {signedInUser?.displayName ? signedInUser.displayName : "friend"},
         how are you?
@@ -43,13 +43,13 @@ const Home = () => {
 
       <AddPost />
 
-      <button onClick={() => refreshPostsData()}>Refresh Posts</button>
+      <Button onClick={() => refreshPostsData()}>Refresh Posts</Button>
       <Post />
       <img
         src="https://i.pinimg.com/originals/5b/54/39/5b543923641d0ef1df257706e19ee255.gif"
         alt="Ship is floating"
       />
-      <button onClick={() => signOutHandle()}>Sign Out</button>
+      <Button onClick={() => signOutHandle()}>Sign Out</Button>
     </div>
   );
 };

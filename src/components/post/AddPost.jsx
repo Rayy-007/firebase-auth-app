@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AuthContext } from "../../App";
 import { useFirebaseFnContext } from "../../hooks/FirebaseContext";
-import { Textarea } from "@material-tailwind/react";
+import { Textarea, Button } from "@material-tailwind/react";
 
 const AddPost = () => {
   const [message, setMessage] = useState();
@@ -30,7 +30,6 @@ const AddPost = () => {
           name="message"
           value={message}
           onChange={handleMessageChange}
-          placeholder="What are you feelling now?"
           label="What are you feelling now?"
         />
         <div className="field padding-bottom--24">
@@ -43,7 +42,7 @@ const AddPost = () => {
             placeholder="What are you feelling now?"
           /> */}
         </div>
-        <button>Send</button>
+        <Button color="blue-gray">Send</Button>
       </form>
     </div>
   );
