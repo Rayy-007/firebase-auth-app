@@ -4,36 +4,19 @@ import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 import { Button } from "@material-tailwind/react";
 import UpProfileForm from "../updateProfile/UpProfileForm";
+import { useFirebaseAuth } from "../../hooks/AuthContext";
+import { useFetchData } from "../../hooks/FetchContext";
+import AddPost from "../post/AddPost";
 
-const Home = ({ signOutHandle }) => {
-  const {
-    signedInUser,
-    updateUserProfile,
-    addDataToFirebase,
-    refreshPostsData,
-  } = useContext(AuthContext);
+const Home = () => {
+  const { signedInUser, signOutHandle } = useFirebaseAuth();
+
+  const { refreshPostsData } = useFetchData();
 
   const [showUpdateForm, setShowUpdateForm] = useState(false);
 
-  const [message, setMessage] = useState();
-
-  // Getting Message from input fields
-  const handleMessageChange = (event) => {
-    setMessage(event.target.value);
-  };
-  //  Sending Message To Firebase
-  const handleFormMessageSubmit = (event) => {
-    event.preventDefault();
-    if (message) {
-      addDataToFirebase(message);
-    } else {
-      alert("Please enter a message");
-    }
-    setMessage("");
-  };
-
   return (
-    <div className="container2 ">
+    <div className="container ">
       <h1>
         Hey {signedInUser?.displayName ? signedInUser.displayName : "friend"},
         how are you?
@@ -57,28 +40,16 @@ const Home = ({ signOutHandle }) => {
         showUpdateForm={showUpdateForm}
         setShowUpdateForm={setShowUpdateForm}
       />
-      <div>
-        <form onSubmit={handleFormMessageSubmit}>
-          <div className="field padding-bottom--24">
-            <label htmlFor="email">Message</label>
-            <textarea
-              type="message"
-              name="message"
-              value={message}
-              onChange={handleMessageChange}
-              placeholder="What are you feelling now?"
-            />
-          </div>
-          <button>Send</button>
-        </form>
-      </div>
-      <button onClick={() => refreshPostsData()}>Refresh Posts</button>
+
+      <AddPost />
+
+      <Button onClick={() => refreshPostsData()}>Refresh Posts</Button>
       <Post />
       <img
         src="https://i.pinimg.com/originals/5b/54/39/5b543923641d0ef1df257706e19ee255.gif"
         alt="Ship is floating"
       />
-      <button onClick={() => signOutHandle()}>Sign Out</button>
+      <Button onClick={() => signOutHandle()}>Sign Out</Button>
     </div>
   );
 };

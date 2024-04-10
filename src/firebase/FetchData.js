@@ -1,4 +1,4 @@
-import { db, auth } from "./config";
+import { db } from "./config";
 import {
   collection,
   query,

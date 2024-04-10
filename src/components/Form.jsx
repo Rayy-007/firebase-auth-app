@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../App";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useFirebaseAuth } from "../hooks/AuthContext";
 
 const Form = ({ isSignInUser }) => {
-  const { signInWithEmail, signUpwithEmail } = useContext(AuthContext);
+  const { signInWithEmail, signUpWithEmail } = useFirebaseAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -19,7 +19,7 @@ const Form = ({ isSignInUser }) => {
 
   const hadleSignup = (event) => {
     event.preventDefault();
-    signUpwithEmail(formData);
+    signUpWithEmail(formData);
   };
 
   const hadleSignIn = (event) => {
