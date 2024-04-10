@@ -34,23 +34,25 @@ const App = () => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        updateUserProfile,
-      }}
-    >
-      <FetchDataProvider>
-        <FirebaseFnProvider>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<SignUp />} />
-            <Route path="/login" element={<SignIn />} />
-            <Route path="/signupGoogle" element={<GoogleLogin />} />
-            <Route path="/success" element={<Success />} />
-          </Routes>
-        </FirebaseFnProvider>
-      </FetchDataProvider>
-    </AuthContext.Provider>
+    <div className="max-w-[1200px] ml-auto mr-auto ">
+      <AuthContext.Provider
+        value={{
+          updateUserProfile,
+        }}
+      >
+        <FetchDataProvider>
+          <FirebaseFnProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/register" element={<SignUp />} />
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/signupGoogle" element={<GoogleLogin />} />
+              <Route path="/success" element={<Success />} />
+            </Routes>
+          </FirebaseFnProvider>
+        </FetchDataProvider>
+      </AuthContext.Provider>
+    </div>
   );
 };
 

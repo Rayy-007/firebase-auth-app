@@ -1,45 +1,18 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../../App";
-import PlaceholderProfile from "../../assets/placeholder-profile.jpg";
 import Post from "../post/Post";
 import { Button } from "@material-tailwind/react";
-import UpProfileForm from "../updateProfile/UpProfileForm";
-import { useFirebaseAuth } from "../../hooks/AuthContext";
 import { useFetchData } from "../../hooks/FetchContext";
 import AddPost from "../post/AddPost";
+import UserProfile from "../profile/UserProfile";
+import { useFirebaseAuth } from "../../hooks/AuthContext";
 
 const Home = () => {
-  const { signedInUser, signOutHandle } = useFirebaseAuth();
+  const { signOutHandle } = useFirebaseAuth();
 
   const { refreshPostsData } = useFetchData();
 
-  const [showUpdateForm, setShowUpdateForm] = useState(false);
-
   return (
-    <div className="container ">
-      <h1>
-        Hey {signedInUser?.displayName ? signedInUser.displayName : "friend"},
-        how are you?
-      </h1>
-      <img
-        src={
-          signedInUser?.photoURL ? signedInUser.photoURL : PlaceholderProfile
-        }
-        referrerPolicy="no-referrer"
-        alt="Profile Image"
-        width={100}
-        height={100}
-        className="profile-image"
-      />
-      {!showUpdateForm && (
-        <Button onClick={() => setShowUpdateForm(true)} className="edit-btn">
-          Edit Profile
-        </Button>
-      )}
-      <UpProfileForm
-        showUpdateForm={showUpdateForm}
-        setShowUpdateForm={setShowUpdateForm}
-      />
+    <div className="pt-6">
+      <UserProfile />
 
       <AddPost />
 
