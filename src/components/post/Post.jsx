@@ -16,6 +16,8 @@ import { dateFormat } from "../../firebase/displayDate";
 import { useFetchData } from "../../hooks/FetchContext";
 import { useFirebaseAuth } from "../../hooks/AuthContext";
 import { CgMenuMotion } from "react-icons/cg";
+import { BiEdit } from "react-icons/bi";
+import { MdDelete } from "react-icons/md";
 
 const Post = () => {
   const { postsData, isLoading, errorMessage } = useFetchData();
@@ -46,18 +48,24 @@ const Post = () => {
                 <Typography variant="h5" color="black">
                   {post?.message}
                 </Typography>
-                <Menu>
+                <Menu className="flex gap-2">
                   <MenuHandler>
                     <IconButton variant="text">
                       <CgMenuMotion />
                     </IconButton>
                   </MenuHandler>
                   <MenuList>
-                    <MenuItem>
-                      <Typography color="black">Edit</Typography>
+                    <MenuItem className="flex items-center gap-2">
+                      <BiEdit />
+                      <Typography variant="small" color="black">
+                        Edit
+                      </Typography>
                     </MenuItem>
-                    <MenuItem>
-                      <Typography color="black">Delete</Typography>
+                    <MenuItem className="flex items-center gap-2">
+                      <MdDelete className="fill-red-500" />
+                      <Typography variant="small" color="black">
+                        Delete
+                      </Typography>
                     </MenuItem>
                   </MenuList>
                 </Menu>

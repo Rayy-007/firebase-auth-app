@@ -19,12 +19,6 @@ body {
   background-color: #f5f5f5;
 }
 
-svg {
-  color: yellow !important;
-  fill: yellow !important;
-  stroke: yellow;
-}
-
 h1 {
   letter-spacing: -1px;
 }
@@ -33,7 +27,7 @@ a {
   text-decoration: unset;
 }
 
-button {
+/* button {
   outline: none;
   border: none;
   cursor: pointer;
@@ -42,7 +36,7 @@ button {
   background-color: #5469d4;
   color: white;
   font-size: 1.3rem;
-}
+} */
 
 button:hover {
   background-color: #4255c0;
