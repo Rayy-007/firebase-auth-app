@@ -19,7 +19,12 @@ body {
   background-color: #f5f5f5;
 }
 
-/* 
+svg {
+  color: yellow !important;
+  fill: yellow !important;
+  stroke: yellow;
+}
+
 h1 {
   letter-spacing: -1px;
 }
@@ -216,8 +221,7 @@ label {
   align-items: center;
 }
 
-.field input,
-textarea {
+.field input {
   font-size: 16px;
   line-height: 28px;
   padding: 8px 16px;
@@ -305,4 +309,4 @@ a.ssolink {
   100% {
     transform: translateX(0px);
   }
-} */
+}

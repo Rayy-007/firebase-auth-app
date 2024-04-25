@@ -25,5 +25,7 @@ export const dateFormat = (firebaseDate) => {
   let minutes = date?.getMinutes();
   minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  return `${day} ${month} ${year} at ${hours}:${minutes}`;
+  let AmOrPm = hours >= 12 ? "PM" : "AM";
+
+  return `${day} ${month} ${year} at ${hours}:${minutes} ${AmOrPm}`;
 };

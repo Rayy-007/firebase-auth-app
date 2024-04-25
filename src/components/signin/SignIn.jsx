@@ -28,7 +28,7 @@ const SignIn = () => {
             </div>
             <div className="footer-link padding-top--24">
               <span>
-                Do not have an account? <Link to="/">Sign Up</Link>
+                Do not have an account? <Link to="/register">Sign Up</Link>
               </span>
               <div className="listing padding-top--24 padding-bottom--24 flex-flex center-center">
                 <span>
