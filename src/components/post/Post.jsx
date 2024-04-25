@@ -13,15 +13,15 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { dateFormat } from "../../firebase/displayDate";
-import { useFetchData } from "../../hooks/FetchContext";
-import { useFirebaseAuth } from "../../hooks/AuthContext";
 import { CgMenuMotion } from "react-icons/cg";
 import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import { useFirebaseAuth } from "../../hooks/AuthContext";
+import { useFetchPosts } from "../../hooks/FetchPostsContext";
 
 const Post = () => {
-  const { postsData, isLoading, errorMessage } = useFetchData();
-  const { refreshPostsData } = useFetchData();
+  const { refreshPostsData, postsData, isLoading, errorMessage } =
+    useFetchPosts();
   const { signedInUser } = useFirebaseAuth();
 
   if (isLoading) {

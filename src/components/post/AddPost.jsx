@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { AuthContext } from "../../App";
-import { useFirebaseFnContext } from "../../hooks/FirebaseContext";
 import { Textarea, Button } from "@material-tailwind/react";
+import { useManagePosts } from "../../hooks/ManagePostsContext";
 
 const AddPost = () => {
   const [message, setMessage] = useState();
-  const { addPostToFirebase } = useFirebaseFnContext();
+  const { addPost } = useManagePosts();
 
   // Getting Message from input fields
   const handleMessageChange = (event) => {
@@ -15,7 +14,7 @@ const AddPost = () => {
   const handleFormMessageSubmit = (event) => {
     event.preventDefault();
     if (message) {
-      addPostToFirebase(message);
+      addPost(message);
     } else {
       alert("Please enter a message");
     }

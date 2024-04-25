@@ -3,8 +3,8 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import { updateProfile } from "firebase/auth";
 import { auth } from "./firebase/config";
 import { Home, Success, GoogleLogin, SignIn, SignUp } from "./components";
-import { FetchDataProvider } from "./hooks/FetchContext";
-import { FirebaseFnProvider } from "./hooks/FirebaseContext";
+import { FetchPostsDataProvider } from "./hooks/FetchPostsContext";
+import { ManagePostsDataProvider } from "./hooks/ManagePostsContext";
 
 export const AuthContext = createContext();
 
@@ -40,8 +40,8 @@ const App = () => {
           updateUserProfile,
         }}
       >
-        <FetchDataProvider>
-          <FirebaseFnProvider>
+        <FetchPostsDataProvider>
+          <ManagePostsDataProvider>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<SignUp />} />
@@ -49,8 +49,8 @@ const App = () => {
               <Route path="/signupGoogle" element={<GoogleLogin />} />
               <Route path="/success" element={<Success />} />
             </Routes>
-          </FirebaseFnProvider>
-        </FetchDataProvider>
+          </ManagePostsDataProvider>
+        </FetchPostsDataProvider>
       </AuthContext.Provider>
     </div>
   );
