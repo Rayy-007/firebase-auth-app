@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 import {
   addPostToFirebase,
   deletePostFromFirebase,
+  updatePostFromFirebase,
 } from "../firebase/managePostsData";
 import { useFirebaseAuth } from "./AuthContext";
 
@@ -37,8 +38,16 @@ export const ManagePostsDataProvider = ({ children }) => {
     }
   };
 
+  const updatePost = (docId, updateMessage) => {
+    try {
+      updatePostFromFirebase(docId, updateMessage);
+    } catch (error) {
+      console.error("Error updating post", error);
+    }
+  };
+
   return (
-    <ManagePostsContext.Provider value={{ addPost, deletePost }}>
+    <ManagePostsContext.Provider value={{ addPost, deletePost, updatePost }}>
       {children}
     </ManagePostsContext.Provider>
   );

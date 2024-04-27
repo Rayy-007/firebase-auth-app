@@ -9,6 +9,7 @@ import {
   MenuHandler,
   MenuItem,
   MenuList,
+  Textarea,
   Tooltip,
   Typography,
 } from "@material-tailwind/react";
@@ -19,12 +20,32 @@ import { MdDelete } from "react-icons/md";
 import { useFirebaseAuth } from "../../hooks/AuthContext";
 import { useFetchPosts } from "../../hooks/FetchPostsContext";
 import { useManagePosts } from "../../hooks/ManagePostsContext";
+import { useState } from "react";
 
 const Post = () => {
   const { refreshPostsData, postsData, isLoading, errorMessage } =
     useFetchPosts();
   const { signedInUser } = useFirebaseAuth();
-  const { deletePost } = useManagePosts();
+  const { deletePost, updatePost } = useManagePosts();
+
+  const [editingPostId, setEditingPostId] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
+
+  const handleEditClick = (post) => {
+    setEditingPostId(post.id);
+    setNewMessage(post.message);
+  };
+
+  const handleUpdateMessage = () => {
+    updatePost(editingPostId, newMessage);
+    setEditingPostId(null);
+    setNewMessage("");
+  };
+
+  const handleCancelMessage = () => {
+    setEditingPostId(null);
+    setNewMessage("");
+  };
 
   if (isLoading) {
     return <div>Loading....</div>;
@@ -46,10 +67,38 @@ const Post = () => {
         postsData?.map((post, index) => (
           <Card key={index} className="my-9">
             <CardBody>
-              <div className="flex justify-between items-center">
-                <Typography variant="h5" color="black">
-                  {post?.message}
-                </Typography>
+              <div className="flex justify-between items-start">
+                {editingPostId === post.id ? (
+                  <div className="flex flex-col w-4/5 gap-4">
+                    <Textarea
+                      value={newMessage}
+                      variant="standard"
+                      className="focus:border-none focus:outline-none border-none "
+                      onChange={(e) => setNewMessage(e.target.value)}
+                    />
+                    <div className="flex gap-3">
+                      <Button
+                        size="sm"
+                        className="rounded-full bg-blue-800"
+                        onClick={handleUpdateMessage}
+                      >
+                        Update
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        className="rounded-full hover:bg-blue-gray-900 hover:text-white"
+                        onClick={handleCancelMessage}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <Typography variant="h5" color="black">
+                    {post?.message}
+                  </Typography>
+                )}
                 <Menu className="flex gap-2">
                   <MenuHandler>
                     <IconButton variant="text">
@@ -57,7 +106,10 @@ const Post = () => {
                     </IconButton>
                   </MenuHandler>
                   <MenuList>
-                    <MenuItem className="flex items-center gap-2">
+                    <MenuItem
+                      onClick={() => handleEditClick(post)}
+                      className="flex items-center gap-2"
+                    >
                       <BiEdit />
                       <Typography variant="small" color="black">
                         Edit
