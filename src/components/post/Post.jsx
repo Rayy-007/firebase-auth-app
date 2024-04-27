@@ -18,11 +18,13 @@ import { BiEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import { useFirebaseAuth } from "../../hooks/AuthContext";
 import { useFetchPosts } from "../../hooks/FetchPostsContext";
+import { useManagePosts } from "../../hooks/ManagePostsContext";
 
 const Post = () => {
   const { refreshPostsData, postsData, isLoading, errorMessage } =
     useFetchPosts();
   const { signedInUser } = useFirebaseAuth();
+  const { deletePost } = useManagePosts();
 
   if (isLoading) {
     return <div>Loading....</div>;
@@ -61,7 +63,10 @@ const Post = () => {
                         Edit
                       </Typography>
                     </MenuItem>
-                    <MenuItem className="flex items-center gap-2">
+                    <MenuItem
+                      onClick={() => deletePost(post.id)}
+                      className="flex items-center gap-2"
+                    >
                       <MdDelete className="fill-red-500" />
                       <Typography variant="small" color="black">
                         Delete

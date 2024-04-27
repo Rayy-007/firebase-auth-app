@@ -1,4 +1,10 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "./config";
 
 /**
@@ -7,9 +13,8 @@ import { db } from "./config";
  * @param {string} signedInUserId - ID of the signed-in user.
  * @returns {Promise<void>}
  */
+const POSTS_COLLECTION_NAME = "posts";
 export async function addPostToFirebase(dataMessage, signedInUserId) {
-  const POSTS_COLLECTION_NAME = "posts";
-
   try {
     const docRef = await addDoc(collection(db, POSTS_COLLECTION_NAME), {
       message: dataMessage,
@@ -20,5 +25,15 @@ export async function addPostToFirebase(dataMessage, signedInUserId) {
   } catch (error) {
     console.error("Error adding post:", error);
     throw new Error("Failed to add post");
+  }
+}
+
+export async function deletePostFromFirebase(docId) {
+  try {
+    const deletedPost = await deleteDoc(doc(db, POSTS_COLLECTION_NAME, docId));
+    console.log("Delete Successfully", deletedPost);
+  } catch (error) {
+    console.error("Error deleting post", error);
+    throw new Error("Failed to delete the post");
   }
 }

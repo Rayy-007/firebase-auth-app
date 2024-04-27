@@ -1,5 +1,8 @@
 import { createContext, useContext } from "react";
-import { addPostToFirebase } from "../firebase/managePostsData";
+import {
+  addPostToFirebase,
+  deletePostFromFirebase,
+} from "../firebase/managePostsData";
 import { useFirebaseAuth } from "./AuthContext";
 
 const ManagePostsContext = createContext();
@@ -26,8 +29,16 @@ export const ManagePostsDataProvider = ({ children }) => {
     }
   };
 
+  const deletePost = (docId) => {
+    try {
+      deletePostFromFirebase(docId);
+    } catch (error) {
+      console.error("Error delete post", error);
+    }
+  };
+
   return (
-    <ManagePostsContext.Provider value={{ addPost }}>
+    <ManagePostsContext.Provider value={{ addPost, deletePost }}>
       {children}
     </ManagePostsContext.Provider>
   );
