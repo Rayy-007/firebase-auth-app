@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   const provider = new GoogleAuthProvider();
 
   const [signedInUser, setSignedInUser] = useState();
+  console.log("🚀 ~ AuthProvider ~ signedInUser:", signedInUser);
 
   // Checking if the user is signed in or not
   useEffect(() => {

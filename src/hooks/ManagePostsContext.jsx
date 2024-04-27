@@ -16,14 +16,13 @@ export const useManagePosts = () => useContext(ManagePostsContext);
  * @returns {JSX.Element} - The context provider component.
  */
 export const ManagePostsDataProvider = ({ children }) => {
-  const { signedInUserId } = useFirebaseAuth();
+  const { signedInUser } = useFirebaseAuth();
 
   const addPost = (postDataMessage) => {
     try {
-      addPostToFirebase(postDataMessage, signedInUserId);
+      addPostToFirebase(postDataMessage, signedInUser.uid);
     } catch (error) {
       console.error("Error adding post:", error);
-      // Handle the error appropriately (e.g., show an alert to the user)
     }
   };
 

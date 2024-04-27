@@ -19,7 +19,7 @@ export const useFetchPosts = () => useContext(FetchPostsContext);
  * @returns {JSX.Element} - The context provider component.
  */
 export const FetchPostsDataProvider = ({ children }) => {
-  const { signedInUserId } = useFirebaseAuth();
+  const { signedInUser } = useFirebaseAuth();
 
   const [postsData, setPostsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,25 +27,25 @@ export const FetchPostsDataProvider = ({ children }) => {
 
   // Fetch real-time data from Firebase
   useEffect(() => {
-    if (!signedInUserId) {
+    if (!signedInUser) {
       return;
     }
 
     setIsLoading(true);
 
-    const unsubscribe = fetchRealTimePostsData(signedInUserId, setPostsData);
+    const unsubscribe = fetchRealTimePostsData(signedInUser.uid, setPostsData);
 
     setIsLoading(false);
     setErrorMessage(null);
 
     return () => unsubscribe && unsubscribe(); // Cleanup function
-  }, [signedInUserId]);
+  }, [signedInUser]);
 
   // Manually refresh posts data
   const refreshPostsData = async () => {
     setIsLoading(true);
     try {
-      const data = await fetchPostsDataOnce(signedInUserId);
+      const data = await fetchPostsDataOnce(signedInUser.uid);
       setPostsData(data);
       setIsLoading(false);
       setErrorMessage(null);
