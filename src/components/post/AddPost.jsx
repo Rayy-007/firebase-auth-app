@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { AuthContext } from "../../App";
-import { useFirebaseFnContext } from "../../hooks/FirebaseContext";
 import { Textarea, Button } from "@material-tailwind/react";
+import { useManagePosts } from "../../hooks/ManagePostsContext";
 
 const AddPost = () => {
   const [message, setMessage] = useState();
-  const { addPostToFirebase } = useFirebaseFnContext();
+  const { addPost } = useManagePosts();
 
   // Getting Message from input fields
   const handleMessageChange = (event) => {
@@ -15,7 +14,7 @@ const AddPost = () => {
   const handleFormMessageSubmit = (event) => {
     event.preventDefault();
     if (message) {
-      addPostToFirebase(message);
+      addPost(message);
     } else {
       alert("Please enter a message");
     }
@@ -23,8 +22,8 @@ const AddPost = () => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleFormMessageSubmit}>
+    <div className="w-2/3 ">
+      <form className="flex flex-col gap-4" onSubmit={handleFormMessageSubmit}>
         <Textarea
           type="message"
           name="message"
@@ -32,17 +31,9 @@ const AddPost = () => {
           onChange={handleMessageChange}
           label="What are you feelling now?"
         />
-        <div className="field padding-bottom--24">
-          {/* <label htmlFor="email">Message</label>
-          <textarea
-            type="message"
-            name="message"
-            value={message}
-            onChange={handleMessageChange}
-            placeholder="What are you feelling now?"
-          /> */}
-        </div>
-        <Button color="blue-gray">Send</Button>
+        <Button type="submit" color="blue-gray">
+          Send
+        </Button>
       </form>
     </div>
   );

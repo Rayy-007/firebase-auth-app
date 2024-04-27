@@ -16,10 +16,9 @@
 }
 body {
   min-height: 100%;
-  background-color: #fbffff;
+  background-color: #f5f5f5;
 }
 
-/* 
 h1 {
   letter-spacing: -1px;
 }
@@ -28,7 +27,7 @@ a {
   text-decoration: unset;
 }
 
-button {
+/* button {
   outline: none;
   border: none;
   cursor: pointer;
@@ -37,7 +36,7 @@ button {
   background-color: #5469d4;
   color: white;
   font-size: 1.3rem;
-}
+} */
 
 button:hover {
   background-color: #4255c0;
@@ -216,8 +215,7 @@ label {
   align-items: center;
 }
 
-.field input,
-textarea {
+.field input {
   font-size: 16px;
   line-height: 28px;
   padding: 8px 16px;
@@ -305,4 +303,4 @@ a.ssolink {
   100% {
     transform: translateX(0px);
   }
-} */
+}
