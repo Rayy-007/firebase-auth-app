@@ -5,6 +5,7 @@ import {
   onSnapshot,
   where,
   getDocs,
+  orderBy,
 } from "firebase/firestore";
 
 const COLLECTION_NAME = "posts";
@@ -17,7 +18,11 @@ const postRef = collection(db, COLLECTION_NAME);
  */
 
 export function fetchRealTimePostsData(signedInUser, setPostsData) {
-  const q = query(postRef, where("userId", "==", signedInUser));
+  const q = query(
+    postRef,
+    where("userId", "==", signedInUser),
+    orderBy("createdAt", "desc")
+  );
 
   onSnapshot(q, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => ({
@@ -37,7 +42,11 @@ export function fetchRealTimePostsData(signedInUser, setPostsData) {
 
 export async function fetchPostsDataOnce(signedInUserId) {
   try {
-    const q = query(postRef, where("userId", "==", signedInUserId));
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      orderBy("createdAt", "desc")
+    );
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -49,6 +58,14 @@ export async function fetchPostsDataOnce(signedInUserId) {
     throw new Error("Failed to fetch posts data");
   }
 }
+
+const wait = () => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+};
 
 //? Just reference for Learning (This is .then apparoach )
 // return new Promise((resolve, reject) => {
