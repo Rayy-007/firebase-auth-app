@@ -1,4 +1,9 @@
-import { Button, Spinner, Typography } from "@material-tailwind/react";
+import {
+  Button,
+  ButtonGroup,
+  Spinner,
+  Typography,
+} from "@material-tailwind/react";
 import { useFetchPosts } from "../../hooks/FetchPostsContext";
 import PostCard from "./PostCard";
 
@@ -13,6 +18,8 @@ const Post = () => {
         <h2 className="font-bold text-lg">Post Lists</h2>
         <Button onClick={() => refreshPostsData()}>Refresh Posts</Button>
       </div>
+
+      <DateFilter />
 
       {isLoading ? (
         <div className="flex justify-center items-center my-8">
@@ -29,10 +36,27 @@ const Post = () => {
       ) : (
         postsData?.map((post, index) => <PostCard post={post} key={index} />)
       )}
-
-      {}
     </section>
   );
 };
 
 export default Post;
+
+const DateFilter = () => {
+  const { fetchTodayPost } = useFetchPosts();
+  return (
+    <ButtonGroup variant="outlined" className="mt-6">
+      <Button
+        onClick={() => {
+          fetchTodayPost();
+        }}
+      >
+        Today
+      </Button>
+      <Button>This Week</Button>
+      <Button>This Month</Button>
+      <Button>This Year</Button>
+      <Button>All Time</Button>
+    </ButtonGroup>
+  );
+};

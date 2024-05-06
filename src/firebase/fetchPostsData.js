@@ -11,20 +11,8 @@ import {
 const COLLECTION_NAME = "posts";
 const postRef = collection(db, COLLECTION_NAME);
 
-/**
- * Fetches real-time data from the Firebase 'posts' collection based on the signed-in user.
- * @param {string} signedInUserId - ID of the signed-in user.
- * @param {function} setPostsData - Function to set posts data.
- */
-
-export function fetchRealTimePostsData(signedInUser, setPostsData) {
-  const q = query(
-    postRef,
-    where("userId", "==", signedInUser),
-    orderBy("createdAt", "desc")
-  );
-
-  onSnapshot(q, (querySnapshot) => {
+function fetchPostsFunction(query, setPostsData) {
+  onSnapshot(query, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -34,19 +22,22 @@ export function fetchRealTimePostsData(signedInUser, setPostsData) {
   });
 }
 
-/**
- * Fetches data once from the Firebase 'posts' collection based on the signed-in user.
- * @param {string} signedInUserId - ID of the signed-in user.
- * @returns {Promise<Array>} - A promise resolving to an array of post data.
- */
+export function fetchRealTimePostsData(signedInUserId, setPostsData) {
+  const q = query(
+    postRef,
+    where("userId", "==", signedInUserId),
+    orderBy("createdAt", "desc")
+  );
+  fetchPostsFunction(q, setPostsData);
+}
 
 export async function fetchPostsDataOnce(signedInUserId) {
+  const q = query(
+    postRef,
+    where("userId", "==", signedInUserId),
+    orderBy("createdAt", "desc")
+  );
   try {
-    const q = query(
-      postRef,
-      where("userId", "==", signedInUserId),
-      orderBy("createdAt", "desc")
-    );
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -59,13 +50,26 @@ export async function fetchPostsDataOnce(signedInUserId) {
   }
 }
 
-const wait = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
-  });
-};
+export function fetchTodayPostData(signedInUserId, setPostsData) {
+  try {
+    const startDay = new Date();
+    startDay.setHours(0, 0, 0, 0);
+
+    const endDay = new Date();
+    endDay.setHours(23, 59, 59, 999);
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startDay),
+      where("createdAt", "<=", endDay),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching today posts data:", error);
+  }
+}
 
 //? Just reference for Learning (This is .then apparoach )
 // return new Promise((resolve, reject) => {

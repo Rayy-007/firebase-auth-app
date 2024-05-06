@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from "react";
 import {
   fetchRealTimePostsData,
   fetchPostsDataOnce,
+  fetchTodayPostData,
 } from "../firebase/fetchPostsData";
 import { useFirebaseAuth } from "./AuthContext";
 
@@ -57,9 +58,31 @@ export const FetchPostsDataProvider = ({ children }) => {
     }
   };
 
+  // data Filter Today Post
+  const fetchTodayPost = () => {
+    setIsLoading(true);
+
+    try {
+      fetchTodayPostData(signedInUser.uid, setPostsData);
+      setIsLoading(false);
+      setErrorMessage(null);
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage(
+        "Oops! Something went wrong. Please refresh the Today post lists."
+      );
+    }
+  };
+
   return (
     <FetchPostsContext.Provider
-      value={{ refreshPostsData, postsData, isLoading, errorMessage }}
+      value={{
+        refreshPostsData,
+        fetchTodayPost,
+        postsData,
+        isLoading,
+        errorMessage,
+      }}
     >
       {children}
     </FetchPostsContext.Provider>
