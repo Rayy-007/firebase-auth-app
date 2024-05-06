@@ -5,21 +5,14 @@ import {
   onSnapshot,
   where,
   getDocs,
+  orderBy,
 } from "firebase/firestore";
 
 const COLLECTION_NAME = "posts";
 const postRef = collection(db, COLLECTION_NAME);
 
-/**
- * Fetches real-time data from the Firebase 'posts' collection based on the signed-in user.
- * @param {string} signedInUserId - ID of the signed-in user.
- * @param {function} setPostsData - Function to set posts data.
- */
-
-export function fetchRealTimePostsData(signedInUser, setPostsData) {
-  const q = query(postRef, where("userId", "==", signedInUser));
-
-  onSnapshot(q, (querySnapshot) => {
+function fetchPostsFunction(query, setPostsData) {
+  onSnapshot(query, (querySnapshot) => {
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -29,15 +22,22 @@ export function fetchRealTimePostsData(signedInUser, setPostsData) {
   });
 }
 
-/**
- * Fetches data once from the Firebase 'posts' collection based on the signed-in user.
- * @param {string} signedInUserId - ID of the signed-in user.
- * @returns {Promise<Array>} - A promise resolving to an array of post data.
- */
+export function fetchRealTimePostsData(signedInUserId, setPostsData) {
+  const q = query(
+    postRef,
+    where("userId", "==", signedInUserId),
+    orderBy("createdAt", "desc")
+  );
+  fetchPostsFunction(q, setPostsData);
+}
 
 export async function fetchPostsDataOnce(signedInUserId) {
+  const q = query(
+    postRef,
+    where("userId", "==", signedInUserId),
+    orderBy("createdAt", "desc")
+  );
   try {
-    const q = query(postRef, where("userId", "==", signedInUserId));
     const querySnapshot = await getDocs(q);
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -47,6 +47,80 @@ export async function fetchPostsDataOnce(signedInUserId) {
   } catch (error) {
     console.error("Error fetching posts data:", error);
     throw new Error("Failed to fetch posts data");
+  }
+}
+
+export function fetchTodayPostData(signedInUserId, setPostsData) {
+  try {
+    const startDay = new Date();
+    startDay.setHours(0, 0, 0, 0);
+
+    const endDay = new Date();
+    endDay.setHours(23, 59, 59, 999);
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startDay),
+      where("createdAt", "<=", endDay),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching today posts data:", error);
+  }
+}
+
+export function fetchThisWeekPostData(signedInUserId, setPostsData) {
+  try {
+    const today = new Date();
+    const currentDay = today.getDay();
+    const dayOffset = currentDay === 0 ? 6 : 1 - currentDay;
+    const startOfWeek = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + dayOffset
+    );
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startOfWeek),
+      where("createdAt", "<=", endOfWeek),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching this week posts data:", error);
+  }
+}
+
+export function fetchThisMonthPostData(signedInUserId, setPostsData) {
+  try {
+    const startOfMonth = new Date();
+    startOfMonth.setHours(0, 0, 0, 0);
+    startOfMonth.setDate(1);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startOfMonth),
+      where("createdAt", "<=", endOfDay),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching this month posts data:", error);
   }
 }
 

@@ -27,25 +27,6 @@ a {
   text-decoration: unset;
 }
 
-/* button {
-  outline: none;
-  border: none;
-  cursor: pointer;
-  padding: 10px 20px;
-  border-radius: 10px;
-  background-color: #5469d4;
-  color: white;
-  font-size: 1.3rem;
-} */
-
-button:hover {
-  background-color: #4255c0;
-}
-
-button:active {
-  background-color: #3747b2;
-}
-
 .profile-image {
   object-fit: cover;
   border-radius: 50%;
