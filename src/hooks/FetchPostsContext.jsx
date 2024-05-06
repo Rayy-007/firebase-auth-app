@@ -3,6 +3,7 @@ import {
   fetchRealTimePostsData,
   fetchPostsDataOnce,
   fetchTodayPostData,
+  fetchThisWeekPostData,
 } from "../firebase/fetchPostsData";
 import { useFirebaseAuth } from "./AuthContext";
 
@@ -26,22 +27,6 @@ export const FetchPostsDataProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Fetch real-time data from Firebase
-  useEffect(() => {
-    if (!signedInUser) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    const unsubscribe = fetchRealTimePostsData(signedInUser.uid, setPostsData);
-
-    setIsLoading(false);
-    setErrorMessage(null);
-
-    return () => unsubscribe && unsubscribe(); // Cleanup function
-  }, [signedInUser]);
-
   // Manually refresh posts data
   const refreshPostsData = async () => {
     setIsLoading(true);
@@ -58,10 +43,31 @@ export const FetchPostsDataProvider = ({ children }) => {
     }
   };
 
-  // data Filter Today Post
+  // Fetch real-time data from Firebase
+  useEffect(() => {
+    if (!signedInUser) {
+      return;
+    }
+    const unsubscribe = fetchAllPost();
+    return () => unsubscribe && unsubscribe(); // Cleanup function
+  }, [signedInUser]);
+
+  const fetchAllPost = () => {
+    setIsLoading(true);
+    try {
+      fetchRealTimePostsData(signedInUser.uid, setPostsData);
+      setIsLoading(false);
+      setErrorMessage(null);
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage(
+        "Oops! Something went wrong. Please refresh the post lists."
+      );
+    }
+  };
+
   const fetchTodayPost = () => {
     setIsLoading(true);
-
     try {
       fetchTodayPostData(signedInUser.uid, setPostsData);
       setIsLoading(false);
@@ -74,11 +80,27 @@ export const FetchPostsDataProvider = ({ children }) => {
     }
   };
 
+  const fetchThisWeekPost = () => {
+    setIsLoading(true);
+    try {
+      fetchThisWeekPostData(signedInUser.uid, setPostsData);
+      setIsLoading(false);
+      setErrorMessage(null);
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage(
+        "Oops! Something went wrong. Please refresh the This Week post lists."
+      );
+    }
+  };
+
   return (
     <FetchPostsContext.Provider
       value={{
         refreshPostsData,
         fetchTodayPost,
+        fetchAllPost,
+        fetchThisWeekPost,
         postsData,
         isLoading,
         errorMessage,

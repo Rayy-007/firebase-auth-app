@@ -43,20 +43,14 @@ const Post = () => {
 export default Post;
 
 const DateFilter = () => {
-  const { fetchTodayPost } = useFetchPosts();
+  const { fetchTodayPost, fetchAllPost, fetchThisWeekPost } = useFetchPosts();
   return (
     <ButtonGroup variant="outlined" className="mt-6">
-      <Button
-        onClick={() => {
-          fetchTodayPost();
-        }}
-      >
-        Today
-      </Button>
-      <Button>This Week</Button>
+      <Button onClick={() => fetchTodayPost()}>Today</Button>
+      <Button onClick={() => fetchThisWeekPost()}>This Week</Button>
       <Button>This Month</Button>
       <Button>This Year</Button>
-      <Button>All Time</Button>
+      <Button onClick={() => fetchAllPost()}>All Time</Button>
     </ButtonGroup>
   );
 };

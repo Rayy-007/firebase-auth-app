@@ -71,6 +71,36 @@ export function fetchTodayPostData(signedInUserId, setPostsData) {
   }
 }
 
+export function fetchThisWeekPostData(signedInUserId, setPostsData) {
+  try {
+    const today = new Date();
+    const currentDay = today.getDay();
+    const dayOffset = currentDay === 0 ? 6 : 1 - currentDay;
+    const startOfWeek = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + dayOffset
+    );
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startOfWeek),
+      where("createdAt", "<=", endOfWeek),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching this week posts data:", error);
+  }
+}
+
 //? Just reference for Learning (This is .then apparoach )
 // return new Promise((resolve, reject) => {
 //   getDocs(q)
