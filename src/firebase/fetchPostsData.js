@@ -101,6 +101,29 @@ export function fetchThisWeekPostData(signedInUserId, setPostsData) {
   }
 }
 
+export function fetchThisMonthPostData(signedInUserId, setPostsData) {
+  try {
+    const startOfMonth = new Date();
+    startOfMonth.setHours(0, 0, 0, 0);
+    startOfMonth.setDate(1);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const q = query(
+      postRef,
+      where("userId", "==", signedInUserId),
+      where("createdAt", ">=", startOfMonth),
+      where("createdAt", "<=", endOfDay),
+      orderBy("createdAt", "desc")
+    );
+
+    fetchPostsFunction(q, setPostsData);
+  } catch (error) {
+    console.error("Error fetching this month posts data:", error);
+  }
+}
+
 //? Just reference for Learning (This is .then apparoach )
 // return new Promise((resolve, reject) => {
 //   getDocs(q)

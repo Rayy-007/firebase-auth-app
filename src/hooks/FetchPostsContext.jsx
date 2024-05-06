@@ -4,22 +4,13 @@ import {
   fetchPostsDataOnce,
   fetchTodayPostData,
   fetchThisWeekPostData,
+  fetchThisMonthPostData,
 } from "../firebase/fetchPostsData";
 import { useFirebaseAuth } from "./AuthContext";
 
 export const FetchPostsContext = createContext();
 
-/**
- * Custom hook to use the FetchContext.
- * @returns {object} - The context value containing data and methods.
- */
 export const useFetchPosts = () => useContext(FetchPostsContext);
-
-/**
- * FetchPostsDataProvider component to provide context for fetching data.
- * @param {object} children - The children components to wrap.
- * @returns {JSX.Element} - The context provider component.
- */
 export const FetchPostsDataProvider = ({ children }) => {
   const { signedInUser } = useFirebaseAuth();
 
@@ -94,6 +85,20 @@ export const FetchPostsDataProvider = ({ children }) => {
     }
   };
 
+  const fetchThisMonthPost = () => {
+    setIsLoading(true);
+    try {
+      fetchThisMonthPostData(signedInUser.uid, setPostsData);
+      setIsLoading(false);
+      setErrorMessage(null);
+    } catch (error) {
+      setIsLoading(false);
+      setErrorMessage(
+        "Oops! Something went wrong. Please refresh the This Month post lists."
+      );
+    }
+  };
+
   return (
     <FetchPostsContext.Provider
       value={{
@@ -101,6 +106,7 @@ export const FetchPostsDataProvider = ({ children }) => {
         fetchTodayPost,
         fetchAllPost,
         fetchThisWeekPost,
+        fetchThisMonthPost,
         postsData,
         isLoading,
         errorMessage,
